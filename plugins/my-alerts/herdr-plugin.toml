@@ -1,0 +1,10 @@
+id = "my.alerts"
+name = "My Alerts"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "에이전트가 허락을 기다리거나 일을 끝내면 알림을 띄운다"
+platforms = ["linux", "macos"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["bash", "alert.sh"]

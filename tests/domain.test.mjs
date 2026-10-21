@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { filterIssues, labelCounts, normalizeIssues } from '../src/domain.mjs';
+import { filterIssues, labelCounts, normalizeIssues, repositoryUrl } from '../src/domain.mjs';
 
 const issues = [
   { number: 10, title: 'Keyboard focus', state: 'open', labels: [{ name: 'bug' }, { name: 'ui' }] },
@@ -27,4 +27,9 @@ test('normalization excludes PRs and malformed entries', () => {
   const result = normalizeIssues([...issues, { number: 99, title: 'PR', pull_request: {}, labels: [] }, null]);
   assert.equal(result.length, 3);
   assert.ok(result.every(x => Array.isArray(x.labels)));
+});
+test('repository link is built only when repository is present', () => {
+  assert.equal(repositoryUrl('herdrdev/herdr'), 'https://github.com/herdrdev/herdr');
+  assert.equal(repositoryUrl(undefined), null);
+  assert.equal(repositoryUrl(''), null);
 });

@@ -22,3 +22,7 @@ export function labelCounts(issues) {
   }
   return [...counts].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }
+
+export function repositoryUrl(repository) {
+  return repository ? `https://github.com/${repository}` : null;
+}

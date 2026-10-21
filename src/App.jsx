@@ -3,6 +3,7 @@ import Filters from './components/Filters.jsx';
 import IssueList from './components/IssueList.jsx';
 import LabelStats from './components/LabelStats.jsx';
 import Releases from './components/Releases.jsx';
+import { repositoryUrl } from './domain.mjs';
 import { stage } from './stage.js';
 
 const DEFAULT_FILTERS = { query: '', state: 'all', label: 'all' };
@@ -66,7 +67,7 @@ export default function App() {
       <Body tab={tab} data={data} error={error} loading={loading} retry={retry} reset={reset} />
       <footer>
         <div>
-          {data && <p>기준 시각 {data.capturedAt} · 출처 <a href={data.source} target="_blank" rel="noreferrer">GitHub API</a></p>}
+          {data && <p>기준 시각 {data.capturedAt} · 출처 {repositoryUrl(data.repository) ? <a href={repositoryUrl(data.repository)} target="_blank" rel="noreferrer">GitHub API</a> : 'GitHub API'} ({data.source})</p>}
           {data?.scope && <p>{data.scope}</p>}
         </div>
         <label className="data-source">데이터

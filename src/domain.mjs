@@ -12,6 +12,14 @@ export function filterIssues(issues, { query = '', state = 'all', label = 'all' 
   );
 }
 
+// 제목을 검색어 일치 여부로 나눈다. 정규화는 filterIssues와 같고, 홀수 번째 조각이 일치 부분이다.
+export function highlightParts(title, query = '') {
+  const q = query.trim().replace(/^#/, '');
+  if (!q) return [title];
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return title.split(new RegExp(`(${escaped})`, 'gi'));
+}
+
 export function labelCounts(issues) {
   const counts = new Map();
   for (const issue of issues) {

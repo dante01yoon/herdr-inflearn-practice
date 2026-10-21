@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { filterIssues, labelCounts, normalizeIssues, repositoryUrl } from '../src/domain.mjs';
+import { filterIssues, highlightParts, labelCounts, normalizeIssues, repositoryUrl } from '../src/domain.mjs';
 
 const issues = [
   { number: 10, title: 'Keyboard focus', state: 'open', labels: [{ name: 'bug' }, { name: 'ui' }] },
@@ -32,4 +32,13 @@ test('repository link is built only when repository is present', () => {
   assert.equal(repositoryUrl('herdrdev/herdr'), 'https://github.com/herdrdev/herdr');
   assert.equal(repositoryUrl(undefined), null);
   assert.equal(repositoryUrl(''), null);
+});
+test('highlight splits title into matched parts at odd indexes', () => {
+  assert.deepEqual(highlightParts('Keyboard focus', ''), ['Keyboard focus']);
+  assert.deepEqual(highlightParts('Keyboard focus', '   '), ['Keyboard focus']);
+  assert.deepEqual(highlightParts('Keyboard focus', ' KEY '), ['', 'Key', 'board focus']);
+  assert.deepEqual(highlightParts('aXa xa', 'xa'), ['a', 'Xa', ' ', 'xa', '']);
+  assert.deepEqual(highlightParts('Fix (a.b) [c]', '(a.b)'), ['Fix ', '(a.b)', ' [c]']);
+  assert.deepEqual(highlightParts('a.b', '.*'), ['a.b']);
+  assert.deepEqual(highlightParts('Issue 11 fix', '#11'), ['Issue ', '11', ' fix']);
 });

@@ -64,7 +64,7 @@ export default function App() {
       </div>}
       {data?.warning && <p className="warning" role="alert">{data.warning}</p>}
       {tab === 'issues' && stage.filters && <Filters filters={filters} setFilters={setFilters} labels={data?.labels ?? []} />}
-      <Body tab={tab} data={data} error={error} loading={loading} retry={retry} reset={reset} />
+      <Body tab={tab} data={data} error={error} loading={loading} retry={retry} reset={reset} query={filters.query} />
       <footer>
         <div>
           {data && <p>기준 시각 {data.capturedAt} · 출처 {repositoryUrl(data.repository) ? <a href={repositoryUrl(data.repository)} target="_blank" rel="noreferrer">GitHub API</a> : 'GitHub API'} ({data.source})</p>}
@@ -80,7 +80,7 @@ export default function App() {
   </>;
 }
 
-function Body({ tab, data, error, loading, retry, reset }) {
+function Body({ tab, data, error, loading, retry, reset, query }) {
   if (error) return <div className="error" role="alert">
     <strong>데이터를 불러오지 못했습니다.</strong><p>{error}</p>
     <button type="button" onClick={retry}>다시 시도</button>
@@ -90,7 +90,7 @@ function Body({ tab, data, error, loading, retry, reset }) {
   return <div className={`content${stage.stats ? '' : ' without-stats'}`} aria-busy={loading}>
     <section aria-label="이슈 목록">
       <p className="result-count" role="status">{loading ? '불러오는 중… ' : ''}전체 {data.total}개 중 {data.filtered}개</p>
-      <IssueList issues={data.issues} onReset={reset} />
+      <IssueList issues={data.issues} query={query} onReset={reset} />
     </section>
     {stage.stats && <LabelStats counts={data.labelCounts ?? []} />}
   </div>;

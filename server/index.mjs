@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { loadDashboard } from './data.mjs';
+import { dashboardResponse } from './dashboard.mjs';
 
 const dist = path.resolve(fileURLToPath(new URL('../dist/', import.meta.url)));
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png' };
@@ -16,12 +17,15 @@ export function createServer() {
       res.writeHead(405, { Allow: 'GET' }); res.end(); return;
     }
     if (url.pathname === '/api/dashboard') {
-      // TODO (backend): contract/API.md에 맞는 서버 필터·집계 구현.
-      // 아래는 기존 스냅숏 응답이며 새 계약의 total/filtered/labels/labelCounts가 없다.
       const source = url.searchParams.get('source') ?? 'snapshot';
       if (!['snapshot', 'live'].includes(source)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: '지원하지 않는 데이터 모드입니다.' })); return;
+      }
+      const state = url.searchParams.get('state') ?? 'all';
+      if (!['all', 'open', 'closed'].includes(state)) {
+        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: '지원하지 않는 이슈 상태입니다.' })); return;
       }
       try {
         let data;
@@ -34,7 +38,10 @@ export function createServer() {
           data = await liveRequest;
         }
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
-        res.end(JSON.stringify(data));
+        res.end(JSON.stringify(dashboardResponse(data, {
+          query: url.searchParams.get('query') ?? '', state,
+          label: url.searchParams.get('label') ?? 'all',
+        })));
       } catch {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: '실습 데이터를 불러오지 못했습니다.' }));

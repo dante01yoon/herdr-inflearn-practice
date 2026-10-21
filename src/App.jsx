@@ -92,6 +92,6 @@ function Body({ tab, data, error, loading, retry, reset, query }) {
       <p className="result-count" role="status">{loading ? '불러오는 중… ' : ''}전체 {data.total}개 중 {data.filtered}개</p>
       <IssueList issues={data.issues} query={query} onReset={reset} />
     </section>
-    {stage.stats && <LabelStats counts={data.labelCounts ?? []} />}
+    {stage.stats && <LabelStats counts={data.labelCounts ?? []} total={data.total} />}
   </div>;
 }

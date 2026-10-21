@@ -4,8 +4,8 @@ function Status({ state }) {
     {state === 'open' ? '열림' : '닫힘'}
   </span>;
 }
-export default function IssueList({ issues }) {
-  if (!issues.length) return <div className="empty" role="status"><strong>조건에 맞는 이슈가 없습니다.</strong><p>검색어나 필터를 바꾸거나 초기화해 보세요.</p></div>;
+export default function IssueList({ issues, onReset }) {
+  if (!issues.length) return <div className="empty" role="status"><strong>조건에 맞는 이슈가 없습니다.</strong><p>검색어나 필터를 바꾸거나 초기화해 보세요.</p>{onReset && <button type="button" onClick={onReset}>조건 초기화</button>}</div>;
   return <div className="table-wrap"><table>
     <thead><tr><th className="number">#</th><th>제목</th><th className="label-heading">라벨</th><th className="date-heading">작성일</th><th>상태</th></tr></thead>
     <tbody>{issues.map(issue => <tr key={issue.number}>

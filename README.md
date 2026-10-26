@@ -1,5 +1,16 @@
 # Herdr 이슈 대시보드 사용 안내
 
+> 인프런 「[에이전트 워크플로우 최강 도구, Herdr 완벽 가이드](https://www.inflearn.com/course/the-ultimate-tool-fo)」 수업 자료 저장소입니다. 수업에서 Claude Code와 Codex가 함께 만든 이슈 대시보드와 실습 파일이 그대로 들어 있습니다.
+>
+> | 폴더 | 쓰는 수업 |
+> |---|---|
+> | `.claude/skills/herdr/` | Skill로 Claude Code에게 맡기기 (Herdr 공식 스킬) |
+> | `contract/`, `acceptance/` | 동시 개발: API 계약과 합격 테스트 |
+> | `workflows/plan-code-review.sh` | 계획→승인→구현→리뷰 스크립트 |
+> | `plugins/my-alerts/` | 직접 만드는 알림 플러그인 |
+>
+> 질문·소식: [카카오톡 오픈채팅](https://open.kakao.com/o/gKcc3ZTi) · [디스코드](https://discord.gg/uHvdGTjahA)
+
 [herdrdev/herdr](https://github.com/herdrdev/herdr) 저장소의 공개 이슈와 정식 릴리스를 확인하는 대시보드입니다. 이슈 목록에서 번호, 제목, 라벨, 작성일, 열림·닫힘 상태를 볼 수 있으며, 제목을 누르면 GitHub 원문이 새 탭에서 열립니다.
 
 표시 범위는 최근 이슈·PR 응답 30개에서 PR을 제외한 이슈입니다. 화면의 전체 개수와 라벨 통계는 **현재 불러온 데이터 기준**이며, 저장소 전체 통계가 아닙니다.
